@@ -1,6 +1,7 @@
 <?php
 
 include_once '../util/init.php';
+include_once '../models/Font.php';
 
 $REQUEST_METHOD = $_SERVER['REQUEST_METHOD'];
 $UPLOAD_DIR = '..' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Assets' . DIRECTORY_SEPARATOR;
@@ -15,15 +16,15 @@ $response = array();
 switch($REQUEST_METHOD) {
 
     case "POST":
-        $response = createFont($FONT_FILE, $UPLOAD_DIR);
+        $response = createFont($FONT_FILE, $UPLOAD_DIR, $db);
         break;
 
     case "GET":
-        $response = readAllFonts();
+        $response = readAllFonts($db);
         break;
 
     case "DELETE":
-        $response = isset($URL_PARAMS['id']) ? deleteFont($URL_PARAMS['id']) : array(
+        $response = isset($URL_PARAMS['id']) ? deleteFont($URL_PARAMS['id'], $db) : array(
             "status" => "error",
             "error" => true,
             "message" => "id not provided in query parameted for delete item"
@@ -41,7 +42,7 @@ switch($REQUEST_METHOD) {
 
 echo json_encode($response);
 
-function createFont($FONT_FILE, $UPLOAD_DIR) {
+function createFont($FONT_FILE, $UPLOAD_DIR, $db) {
     if ($_FILES[$FONT_FILE]) {
         $file_name =  $_FILES[$FONT_FILE]["name"];
         $file_tmp_name = $_FILES[$FONT_FILE]["tmp_name"];
@@ -98,27 +99,12 @@ function createFont($FONT_FILE, $UPLOAD_DIR) {
     }
 }
 
-function readAllFonts() {
-
-    // TODO: fetch from database
-    $response = array();
-    array_push($response, array(
-        "id" => 1, 
-        "fontName" => 'Roboto-Black', 
-        "filePath" => 'src/Assets/Roboto-Black.ttf', 
-        "fileSize" => "1000KB"
-    ));
-    array_push($response, array(
-        "id" => 2, 
-        "fontName" => 'Roboto-Bold', 
-        "filePath" => 'src/Assets/Roboto-Bold.ttf', 
-        "fileSize" => "1000KB"
-    ));
-
-    return $response;
+function readAllFonts($db) {
+    $fontModel = new Font($db);
+    return $fontModel->readAll();
 }
 
-function deleteFont($font_id) {
+function deleteFont($font_id, $db) {
 
     return array(
         "status" => "success",
