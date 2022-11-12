@@ -3,16 +3,9 @@
 include_once '../util/init.php';
 include_once '../models/Font.php';
 
-$REQUEST_METHOD = $_SERVER['REQUEST_METHOD'];
 $UPLOAD_DIR = 'src' . DIRECTORY_SEPARATOR . 'Assets' . DIRECTORY_SEPARATOR;
 $RELATIVE_UPLOAD_DIR = '..' . DIRECTORY_SEPARATOR . $UPLOAD_DIR;
 $FONT_FILE = 'fontFile';
-
-$URL_PARAMS = array();
-parse_str($_SERVER['QUERY_STRING'], $URL_PARAMS);
-
-$response = array();
-
 
 switch($REQUEST_METHOD) {
 
@@ -25,19 +18,11 @@ switch($REQUEST_METHOD) {
         break;
 
     case "DELETE":
-        $response = isset($URL_PARAMS['id']) ? deleteFont($URL_PARAMS['id'], $db) : array(
-            "status" => "error",
-            "error" => true,
-            "message" => "id not provided in query parameted for delete item"
-        );
+        $response = isset($URL_PARAMS['id']) ? deleteFont($URL_PARAMS['id'], $db) : no_id_in_query_param_bad_request();
         break;
 
     default:
-        $response = array(
-            "status" => "error",
-            "error" => true,
-            "message" => "unsupported request method: " . $REQUEST_METHOD
-        );
+        $response = request_method_not_allowed($REQUEST_METHOD);
 
 }
 
@@ -82,9 +67,9 @@ function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $db) {
         }
         move_uploaded_file($file_tmp_name, $upload_relative_path);
         $font = new Font($db);
-        $font->font_name = $file_name;
-        $font->file_path = $upload_path;
-        $font->file_size = $file_size;
+        $font->fontName = $file_name;
+        $font->filePath = $upload_path;
+        $font->fileSize = $file_size;
         $success = $font->create();
         if (!$success) {
             throw new Exception("failed to save font in db");
@@ -97,13 +82,7 @@ function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $db) {
     } catch (Exception $e) {
         // delete uploaded font file if uploaded
         if (file_exists($upload_relative_path)) unlink($upload_relative_path);
-        http_response_code(500);
-        return array(
-            "status" => "error",
-            "error" => true,
-            "message" => "failed to create font: " . $e->getMessage(),
-            "data" => $e
-        );
+        return server_side_exception_response($e);
     }
 }
 
@@ -112,13 +91,7 @@ function readAllFonts($db) {
         $fontModel = new Font($db);
        return $fontModel->readAll();
     } catch (Exception $e) {
-        http_response_code(500);
-        return array(
-            "status" => "error",
-            "error" => true,
-            "message" => "failed to read fonts: " . $e->getMessage(),
-            "data" => $e
-        );
+        return server_side_exception_response($e);
     }
 }
 
@@ -132,7 +105,7 @@ function deleteFont($font_id, $db) {
                 "message" => "font with id: " . $font_id . " not found"
             );
         }
-        $font_file_relative_path = '..' . DIRECTORY_SEPARATOR . $font->file_path;
+        $font_file_relative_path = '..' . DIRECTORY_SEPARATOR . $font->filePath;
         if (file_exists($font_file_relative_path)) unlink($font_file_relative_path);
         $font->delete($font_id);
         return array(
@@ -141,13 +114,7 @@ function deleteFont($font_id, $db) {
             "message" => "font with id: " . $font_id . " deleted"
         );
     } catch (Exception $e) {
-        http_response_code(500);
-        return array(
-            "status" => "error",
-            "error" => true,
-            "message" => "failed to delete font: " . $e->getMessage(),
-            "data" => $e
-        );
+        return server_side_exception_response($e);
     }
 }
 

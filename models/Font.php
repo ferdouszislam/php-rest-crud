@@ -5,22 +5,22 @@ include_once 'BaseModel.php';
 class Font extends BaseModel
 {
 
-    public $table = 'font';
+    protected $table = 'font';
 
     const FILE_SIZE_UNIT = 'KB';
 
     public $id;
-    public $font_name;
-    public $file_path;
-    public $file_size;
+    public $fontName;
+    public $filePath;
+    public $fileSize;
 
     public function create()
     {
-        $query = 'INSERT INTO ' . $this->table . ' SET font_name = :font_name, file_path = :file_path, file_size = :file_size';
+        $query = 'INSERT INTO ' . $this->table . ' SET font_name = :fontName, file_path = :filePath, file_size = :fileSize';
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':font_name', $this->font_name);
-        $stmt->bindParam(':file_path', $this->file_path);
-        $stmt->bindParam(':file_size', $this->file_size);
+        $stmt->bindParam(':fontName', $this->fontName);
+        $stmt->bindParam(':filePath', $this->filePath);
+        $stmt->bindParam(':fileSize', $this->fileSize);
         if ($stmt->execute()) return true;
         printf("error occurred in Font.create(): %s.\n", $stmt->error);
         return false;
@@ -36,9 +36,9 @@ class Font extends BaseModel
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $font = new Font();
             $font->id = $row['id'];
-            $font->font_name = $row['font_name'];
-            $font->file_path = $row['file_path'];
-            $font->file_size = $row['file_size'];
+            $font->fontName = $row['font_name'];
+            $font->filePath = $row['file_path'];
+            $font->fileSize = $row['file_size'];
             array_push($fonts, $font);
         }
         return  $fonts;
@@ -53,9 +53,9 @@ class Font extends BaseModel
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if (gettype($result) == 'boolean') return null;
         $this->id = $result['id'];
-        $this->font_name = $result['font_name'];
-        $this->file_path = $result['file_path'];
-        $this->file_size = $result['file_size'];
+        $this->fontName = $result['font_name'];
+        $this->filePath = $result['file_path'];
+        $this->fileSize = $result['file_size'];
         return $this;
     }
 
