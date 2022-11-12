@@ -44,7 +44,28 @@ class Font extends BaseModel
         return  $fonts;
     }
 
-    public function delete()
+    public function read($id)
     {
+        $query = 'SELECT t.id, t.font_name, t.file_path, t.file_size FROM ' . $this->table . ' t WHERE t.id = ? LIMIT 0,1';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (gettype($result) == 'boolean') return null;
+        $this->id = $result['id'];
+        $this->font_name = $result['font_name'];
+        $this->file_path = $result['file_path'];
+        $this->file_size = $result['file_size'];
+        return $this;
+    }
+
+    public function delete($id)
+    {
+        $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        if ($stmt->execute()) return true;
+        printf("Error: %s.\n", $stmt->error);
+        return false;
     }
 }

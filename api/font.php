@@ -62,6 +62,7 @@ function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $db) {
         $upload_relative_path = preg_replace('/\s+/', '-', $upload_relative_path);
         $error = $_FILES[$FONT_FILE]["error"];
         if ($error > 0) {
+            http_response_code($error == 4 ? 422 : 500);
             return array(
                 "status" => "error",
                 "error" => true,
@@ -72,21 +73,14 @@ function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $db) {
             );
         }
         if (file_exists($upload_relative_path)) {
+            http_response_code(422);
             return array(
                 "status" => "error",
                 "error" => false,
                 "message" => "font file already exists"
             );
         }
-        try {
-            move_uploaded_file($file_tmp_name, $upload_relative_path);
-        } catch (Exception $e) {
-            return array(
-                "status" => "error",
-                "error" => true,
-                "message" => "error uploading the file: " . $e->getMessage()
-            );
-        }
+        move_uploaded_file($file_tmp_name, $upload_relative_path);
         $font = new Font($db);
         $font->font_name = $file_name;
         $font->file_path = $upload_path;
@@ -103,6 +97,7 @@ function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $db) {
     } catch (Exception $e) {
         // delete uploaded font file if uploaded
         if (file_exists($upload_relative_path)) unlink($upload_relative_path);
+        http_response_code(500);
         return array(
             "status" => "error",
             "error" => true,
@@ -113,17 +108,47 @@ function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $db) {
 }
 
 function readAllFonts($db) {
-    $fontModel = new Font($db);
-    return $fontModel->readAll();
+    try{
+        $fontModel = new Font($db);
+       return $fontModel->readAll();
+    } catch (Exception $e) {
+        http_response_code(500);
+        return array(
+            "status" => "error",
+            "error" => true,
+            "message" => "failed to read fonts: " . $e->getMessage(),
+            "data" => $e
+        );
+    }
 }
 
 function deleteFont($font_id, $db) {
-
-    return array(
-        "status" => "success",
-        "error" => false,
-        "message" => "font with id: " . $font_id . " deleted"
-    );
+    try{
+        $font = new Font($db);
+        $font = $font->read($font_id);
+        if ($font == null) {
+            http_response_code(404);
+            return array(
+                "message" => "font with id: " . $font_id . " not found"
+            );
+        }
+        $font_file_relative_path = '..' . DIRECTORY_SEPARATOR . $font->file_path;
+        if (file_exists($font_file_relative_path)) unlink($font_file_relative_path);
+        $font->delete($font_id);
+        return array(
+            "status" => "success",
+            "error" => false,
+            "message" => "font with id: " . $font_id . " deleted"
+        );
+    } catch (Exception $e) {
+        http_response_code(500);
+        return array(
+            "status" => "error",
+            "error" => true,
+            "message" => "failed to delete font: " . $e->getMessage(),
+            "data" => $e
+        );
+    }
 }
 
 ?>
