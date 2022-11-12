@@ -29,9 +29,37 @@ function no_id_in_query_param_bad_request() {
 function request_method_not_allowed($request_method) {
     http_response_code(405);
     return array(
-        "status" => "error",
+        "status" => "method_not_allowed",
         "error" => true,
         "message" => "unsupported request method: " . $request_method
+    );
+}
+
+function validation_fail_response($message, $statusCode) {
+    http_response_code($statusCode);
+    return array(
+        "status" => "validation_fail",
+        "error" => true,
+        "message" => $message
+    );
+}
+
+function data_constraint_violation_response(PDOException $e) {
+    http_response_code(422);
+    return array(
+        "status" => "data_constrain_violation",
+        "error" => true,
+        "message" => "provided data violates contraints: " . $e->getMessage(),
+        "data" => $e
+    );
+}
+
+function not_found_response($message) {
+    http_response_code(404);
+    return array(
+        "status" => "not_found",
+        "error" => true,
+        "message" => $message
     );
 }
 

@@ -87,9 +87,9 @@ function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $db) {
 }
 
 function readAllFonts($db) {
-    try{
+    try {
         $fontModel = new Font($db);
-       return $fontModel->readAll();
+        return $fontModel->readAll();
     } catch (Exception $e) {
         return server_side_exception_response($e);
     }
@@ -100,10 +100,7 @@ function deleteFont($font_id, $db) {
         $font = new Font($db);
         $font = $font->read($font_id);
         if ($font == null) {
-            http_response_code(404);
-            return array(
-                "message" => "font with id: " . $font_id . " not found"
-            );
+            return not_found_response("font with id: " . $font_id . " not found");
         }
         $font_file_relative_path = '..' . DIRECTORY_SEPARATOR . $font->filePath;
         if (file_exists($font_file_relative_path)) unlink($font_file_relative_path);
