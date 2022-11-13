@@ -6,11 +6,12 @@ include_once '../models/Font.php';
 $UPLOAD_DIR = 'src' . DIRECTORY_SEPARATOR . 'Assets' . DIRECTORY_SEPARATOR;
 $RELATIVE_UPLOAD_DIR = '..' . DIRECTORY_SEPARATOR . $UPLOAD_DIR;
 $FONT_FILE = 'fontFile';
+$FONT_TTF_MIMETYPE = 'font/ttf';
 
 switch($REQUEST_METHOD) {
 
     case "POST":
-        $response = createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $db);
+        $response = createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $FONT_TTF_MIMETYPE, $db);
         break;
 
     case "GET":
@@ -28,7 +29,7 @@ switch($REQUEST_METHOD) {
 
 echo json_encode($response);
 
-function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $db) {
+function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $FONT_TTF_MIMETYPE, $db) {
     if (!$_FILES[$FONT_FILE]) {
         return array(
             "status" => "error",
@@ -58,12 +59,9 @@ function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $db) {
             );
         }
         if (file_exists($upload_relative_path)) {
-            http_response_code(422);
-            return array(
-                "status" => "error",
-                "error" => false,
-                "message" => "font file already exists"
-            );
+            return file_validation_fail_response("font file already exists");
+        } else if ($_FILES[$FONT_FILE]["type"] != $FONT_TTF_MIMETYPE) {
+            return file_validation_fail_response("not a valid font file");
         }
         move_uploaded_file($file_tmp_name, $upload_relative_path);
         $font = new Font($db);

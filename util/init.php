@@ -53,6 +53,15 @@ function validation_fail_response($message, $statusCode) {
     );
 }
 
+function file_validation_fail_response($message) {
+    http_response_code(422);
+    return array(
+        "status" => "file_validation_fail",
+        "error" => true,
+        "message" => $message
+    );
+}
+
 function data_constraint_violation_response(PDOException $e) {
     http_response_code(422);
     return array(
