@@ -164,10 +164,11 @@ function validateFontForFontGroup($fontForFontGroup, $db) {
     $font = $font->read($fontForFontGroup->selectedFontId);
     if ($font == null) {
         return "font with id: " . $fontForFontGroup->selectedFontId . " does not exist";
-    } else if ($font->fontName != $fontForFontGroup->fontName) {
-        return "font name: " . $fontForFontGroup->fontName 
-        . " does not match font id: " . $fontForFontGroup->selectedFontId;
-    }
+    } 
+    // else if ($font->fontName != $fontForFontGroup->fontName) {
+    //     return "font name: " . $fontForFontGroup->fontName 
+    //     . " does not match font id: " . $fontForFontGroup->selectedFontId;
+    // }
     return null;
 }
 
