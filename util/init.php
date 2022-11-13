@@ -9,6 +9,15 @@ header('Content-Type: application/json; charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: *");
 
+$URL = '';
+if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')   
+    $URL = "https://";   
+else  
+    $URL = "http://";   
+// Append the host(domain name, ip) to the URL.   
+$URL.= $_SERVER['HTTP_HOST'];   
+// Append the requested resource location to the URL   
+$URL.= $_SERVER['REQUEST_URI']; 
 $REQUEST_METHOD = $_SERVER['REQUEST_METHOD'];
 $URL_PARAMS = array();
 parse_str($_SERVER['QUERY_STRING'], $URL_PARAMS);

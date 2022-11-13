@@ -19,7 +19,7 @@ class FontGroup extends BaseModel {
             printf("error occurred in FontGroup.create(): %s.\n", $stmt->error);
             return false;
         }
-        $this->id = $this->conn->lastInsertId();
+        $this->id = $this->getLastInsertedId();
         foreach($this->selectedFontList as $fontForFontGroup) {
             $fontForFontGroup->fontGroupId = $this->id;
             if (!$fontForFontGroup->create()) {
@@ -76,6 +76,34 @@ class FontGroup extends BaseModel {
             $this->add_font_for_group($this, $row);
         }
         return $found ? $this : null;
+    }
+
+    public function update() 
+    {
+        $query = 'UPDATE ' . $this->table . ' SET font_group_name = :fontGroupName'
+        . ' WHERE id = :fontGroupId';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':fontGroupName', $this->fontGroupName);
+        $stmt->bindParam(':fontGroupId', $this->id);
+        if (!$stmt->execute()) {
+            printf("error occurred in FontGroup.update(): %s.\n", $stmt->error);
+            return false;
+        }
+        throw new Exception("hello");
+        $fontForFontGroup = new FontForFontGroup($this->conn);
+        if (!$fontForFontGroup->deleteByFontGroupId($this->id)) {
+            printf("failed to delete fontForFontGroups in FontGroup.update()\n");
+            return false;
+        }
+        foreach($this->selectedFontList as $fontForFontGroup) {
+            $fontForFontGroup->fontGroupId = $this->id;
+            if (!$fontForFontGroup->create()) {
+                printf("failed to create fontForFontGroup: %s in FontGroup.update()\n", strval($fontForFontGroup));
+                return false;
+            }
+            $fontForFontGroup->id = $fontForFontGroup->getLastInsertedId();
+        }
+        return true;
     }
 
     private function add_font_for_group($fontGroup, $row) {

@@ -42,6 +42,15 @@ class FontForFontGroup extends BaseModel {
         return $this;
     }
 
+    public function deleteByFontGroupId($fontGroupId) {
+        $query = 'DELETE FROM ' . $this->table . ' WHERE font_group_id = :id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $fontGroupId);
+        if ($stmt->execute()) return true;
+        printf("Error: %s.\n", $stmt->error);
+        return false;
+    }
+
     public function __toString()
     {
         return '[id: ' . $this->id . " fontName: " . $this->fontName 
