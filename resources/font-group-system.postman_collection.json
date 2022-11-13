@@ -1,0 +1,288 @@
+{
+	"info": {
+		"_postman_id": "8dec9a87-15a9-4b34-9d72-c14780fd5437",
+		"name": "font-group-system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16893742"
+	},
+	"item": [
+		{
+			"name": "font",
+			"item": [
+				{
+					"name": "create font",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fontFile",
+									"type": "file",
+									"src": "/C:/Users/NSL/Desktop/nsl_tasks/font-group-system/Cabin-Regular.ttf"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/font-group-system/api/font.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"font-group-system",
+								"api",
+								"font.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "read all fonts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fontFile",
+									"type": "file",
+									"src": "/C:/Users/NSL/Desktop/nsl_tasks/php/Cabin-Bold.ttf"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/font-group-system/api/font.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"font-group-system",
+								"api",
+								"font.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete font",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fontFile",
+									"type": "file",
+									"src": "/C:/Users/NSL/Desktop/nsl_tasks/php/Cabin-Bold.ttf"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/font-group-system/api/font.php?id=14",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"font-group-system",
+								"api",
+								"font.php"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "14"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "font_group",
+			"item": [
+				{
+					"name": "create font group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fontGroupName\": \"my-font-group\",\r\n    \"selectedFontList\": [\r\n        {\r\n            \"fontName\": \"Cabin-Bold.ttf\",\r\n            \"selectedFontId\": 15,\r\n            \"specificSize\": 12.5,\r\n            \"priceChange\": 10\r\n        },\r\n        {\r\n            \"fontName\": \"Cabin-Medium.ttf\",\r\n            \"selectedFontId\": 16,\r\n            \"specificSize\": 16.5,\r\n            \"priceChange\": 20\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/font-group-system/api/font_group.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"font-group-system",
+								"api",
+								"font_group.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update font group",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fontGroupName\": \"their-font-group\",\r\n    \"selectedFontList\": [\r\n        {\r\n            \"fontName\": \"Cabin-Bold.ttf\",\r\n            \"selectedFontId\": 15,\r\n            \"specificSize\": 22.5,\r\n            \"priceChange\": 30\r\n        },\r\n        {\r\n            \"fontName\": \"Cabin-Regular.ttf\",\r\n            \"selectedFontId\": 17,\r\n            \"specificSize\": 24.0,\r\n            \"priceChange\": 25\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/font-group-system/api/font_group.php?id=14",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"font-group-system",
+								"api",
+								"font_group.php"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "14"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "read all font groups",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fontGroupName\": \"my-font-group\",\r\n    \"selectedFontList\": [\r\n        {\r\n            \"fontName\": \"Cabin-Bold.ttf\",\r\n            \"selectedFontId\": 8,\r\n            \"specificSize\": 10.00,\r\n            \"priceChange\": 10\r\n        },\r\n        {\r\n            \"fontName\": \"Cabin-Regular.ttf\",\r\n            \"selectedFontId\": 10,\r\n            \"specificSize\": 20.00,\r\n            \"priceChange\": 20\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/font-group-system/api/font_group.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"font-group-system",
+								"api",
+								"font_group.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "read font group by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fontGroupName\": \"my-font-group\",\r\n    \"selectedFontList\": [\r\n        {\r\n            \"fontName\": \"Cabin-Bold.ttf\",\r\n            \"selectedFontId\": 8,\r\n            \"specificSize\": 10.00,\r\n            \"priceChange\": 10\r\n        },\r\n        {\r\n            \"fontName\": \"Cabin-Regular.ttf\",\r\n            \"selectedFontId\": 10,\r\n            \"specificSize\": 20.00,\r\n            \"priceChange\": 20\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/font-group-system/api/font_group.php?id=14",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"font-group-system",
+								"api",
+								"font_group.php"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "14"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete font group by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fontGroupName\": \"my-font-group\",\r\n    \"selectedFontList\": [\r\n        {\r\n            \"fontName\": \"Cabin-Bold.ttf\",\r\n            \"selectedFontId\": 8,\r\n            \"specificSize\": 10.00,\r\n            \"priceChange\": 10\r\n        },\r\n        {\r\n            \"fontName\": \"Cabin-Regular.ttf\",\r\n            \"selectedFontId\": 10,\r\n            \"specificSize\": 20.00,\r\n            \"priceChange\": 20\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/font-group-system/api/font_group.php?id=13",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"font-group-system",
+								"api",
+								"font_group.php"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "13"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
