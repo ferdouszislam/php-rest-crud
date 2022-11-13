@@ -21,7 +21,10 @@ class Font extends BaseModel
         $stmt->bindParam(':fontName', $this->fontName);
         $stmt->bindParam(':filePath', $this->filePath);
         $stmt->bindParam(':fileSize', $this->fileSize);
-        if ($stmt->execute()) return true;
+        if ($stmt->execute()) {
+            $this->id = $this->getLastInsertedId();
+            return true;
+        } 
         printf("error occurred in Font.create(): %s.\n", $stmt->error);
         return false;
     }

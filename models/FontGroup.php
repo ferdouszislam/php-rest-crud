@@ -89,7 +89,6 @@ class FontGroup extends BaseModel {
             printf("error occurred in FontGroup.update(): %s.\n", $stmt->error);
             return false;
         }
-        throw new Exception("hello");
         $fontForFontGroup = new FontForFontGroup($this->conn);
         if (!$fontForFontGroup->deleteByFontGroupId($this->id)) {
             printf("failed to delete fontForFontGroups in FontGroup.update()\n");

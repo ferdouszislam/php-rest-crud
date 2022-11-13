@@ -20,7 +20,10 @@ class FontForFontGroup extends BaseModel {
         $stmt->bindParam(':selectedFontId', $this->selectedFontId);
         $stmt->bindParam(':specificSize', $this->specificSize);
         $stmt->bindParam(':priceChange', $this->priceChange);
-        if ($stmt->execute()) return true;
+        if ($stmt->execute()) {
+            $this->id = $this->getLastInsertedId();
+            return true;
+        }
         printf("error occurred in FontForFontGroup.create(): %s.\n", $stmt->error);
         return false;
     }

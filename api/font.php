@@ -70,14 +70,14 @@ function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $db) {
         $font->fontName = $file_name;
         $font->filePath = $upload_path;
         $font->fileSize = $file_size;
-        $success = $font->create();
-        if (!$success) {
+        if (!$font->create()) {
             throw new Exception("failed to save font in db");
         }
         return array(
             "status" => "success",
             "error" => false,
-            "message" => "font created successfully"
+            "message" => "font created successfully",
+            "data" => $font
         );
     } catch (Exception $e) {
         // delete uploaded font file if uploaded
