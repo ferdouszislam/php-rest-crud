@@ -8,6 +8,11 @@ ini_set('display_errors', 1); // set to 1 to show errors
 header('Content-Type: application/json; charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: *");
+if ($_SERVER['REQUEST_METHOD'] == "OPTIONS") {
+    header("Access-Control-Allow-Headers: *");
+    header("HTTP/1.1 200 OK");
+    die();
+}
 
 $URL = '';
 if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')   
