@@ -3,8 +3,10 @@
 include_once '../util/init.php';
 include_once '../models/Font.php';
 
-$UPLOAD_DIR = 'src' . DIRECTORY_SEPARATOR . 'Assets' . DIRECTORY_SEPARATOR;
-$RELATIVE_UPLOAD_DIR = '..' . DIRECTORY_SEPARATOR . $UPLOAD_DIR;
+$DIR_SEPARATOR = '/';
+
+$UPLOAD_DIR = 'src' . $DIR_SEPARATOR . 'Assets' . $DIR_SEPARATOR;
+$RELATIVE_UPLOAD_DIR = '..' . $DIR_SEPARATOR . $UPLOAD_DIR;
 $FONT_FILE = 'fontFile';
 $FONT_TTF_MIMETYPE = 'font/ttf';
 
@@ -100,7 +102,7 @@ function deleteFont($font_id, $db) {
         if ($font == null) {
             return not_found_response("font with id: " . $font_id . " not found");
         }
-        $font_file_relative_path = '..' . DIRECTORY_SEPARATOR . $font->filePath;
+        $font_file_relative_path = '../' . $font->filePath;
         if (file_exists($font_file_relative_path)) unlink($font_file_relative_path);
         $font->delete($font_id);
         return array(
