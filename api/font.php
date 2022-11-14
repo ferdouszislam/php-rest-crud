@@ -63,7 +63,7 @@ function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $FONT_TTF_MIM
         if (file_exists($upload_relative_path)) {
             return file_validation_fail_response("font file already exists");
         } else if ($_FILES[$FONT_FILE]["type"] != $FONT_TTF_MIMETYPE) {
-            return file_validation_fail_response("not a valid font file");
+            // return file_validation_fail_response("not a valid font file");
         }
         move_uploaded_file($file_tmp_name, $upload_relative_path);
         $font = new Font($db);
