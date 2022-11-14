@@ -29,7 +29,7 @@ switch($REQUEST_METHOD) {
 
 }
 
-echo json_encode($response);
+echo json_encode($response, JSON_UNESCAPED_SLASHES);
 
 function createFont($FONT_FILE, $UPLOAD_DIR, $RELATIVE_UPLOAD_DIR, $FONT_TTF_MIMETYPE, $db) {
     if (!$_FILES[$FONT_FILE]) {

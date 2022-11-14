@@ -28,7 +28,7 @@ switch($REQUEST_METHOD) {
 
 }
 
-echo json_encode($response);
+echo json_encode($response, JSON_UNESCAPED_SLASHES);
 
 function createFontGroup($data, $db) {
     try {
